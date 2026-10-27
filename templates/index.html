@@ -1,17 +1,203 @@
 <!doctype html>
 <html lang="pt-BR">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>FoodPoint • Pedidos e expediente</title><link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script></head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>FoodPoint • Pedidos e expediente</title>
+
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+
 <body>
-<header><a class="marca" href="/">food<span>point</span><small>OPERAÇÃO LOCAL</small></a><span class="selo">Pedidos & expediente</span></header>
-<main>
-<div class="intro"><div><p class="eyebrow">DA COZINHA AO FECHAMENTO</p><h1>Cada pedido, no seu ponto.</h1><p>Monte o pedido, acompanhe as etapas e confira o resultado do dia.</p></div><div class="data"><label for="dia">Expediente consultado</label><input id="dia" type="date"></div></div>
-<div id="mensagem" role="status" aria-live="polite"></div>
-<div class="layout">
-<section class="painel montar"><div class="titulo"><span class="numero">01</span><div><h2>Novo pedido</h2><p>Os envios entram no expediente de hoje.</p></div></div>
-<p class="label">ADICIONE UM FAVORITO</p><div class="favoritos"><button type="button" data-nome="Hambúrguer" data-preco="25">Hambúrguer <b>R$ 25</b></button><button type="button" data-nome="Batata" data-preco="12">Batata <b>R$ 12</b></button><button type="button" data-nome="Refrigerante" data-preco="8">Refrigerante <b>R$ 8</b></button></div>
-<form id="item-form"><label for="nome">Produto</label><input id="nome" maxlength="80" placeholder="Ex.: hambúrguer artesanal" required><div class="campos"><div><label for="quantidade">Quantidade</label><input id="quantidade" type="number" min="1" max="999" step="1" value="1" required></div><div><label for="preco">Preço unitário (R$)</label><input id="preco" type="number" min="0.01" max="99999.99" step="0.01" placeholder="25,00" required></div></div><button class="secundario" type="submit">+ Adicionar ao pedido</button></form>
-<div id="carrinho" class="carrinho"></div><div class="total"><span>Total do pedido</span><strong id="total">R$ 0,00</strong></div><button id="enviar" class="principal" disabled>Enviar pedido →</button><p class="nota">O formulário é limpo somente após a confirmação do envio.</p></section>
-<div class="coluna"><section class="painel"><div class="titulo"><span class="numero">02</span><div><h2>Pedidos em andamento</h2><p>Avance as etapas para registrar os tempos reais.</p></div><button id="atualizar" class="texto">Atualizar</button></div><div id="pedidos" class="pedidos"></div></section>
-<section class="painel fechamento"><div class="titulo"><span class="numero">03</span><div><h2>Fechamento do expediente</h2><p id="situacao">Carregando resumo…</p></div></div><div id="indicadores" class="indicadores"></div><div id="etapas"></div><div id="gargalos" class="aviso"></div><p class="nota">Média de atendimento: pedidos concluídos. Cancelados não entram no valor concluído nem nos tempos. Limites ilustrativos e ajustáveis.</p><button id="fechar" class="principal" disabled>Fechar expediente</button><p class="nota">Conclua ou cancele todos os pedidos do dia antes de fechar.</p></section></div>
-</div><footer>FoodPoint · Demonstração independente · Dados salvos somente neste servidor local</footer>
-</main></body></html>
+  <!-- Cabeçalho -->
+  <header>
+    <a class="marca" href="/">
+      food<span>point</span>
+      <small>OPERAÇÃO LOCAL</small>
+    </a>
+
+    <span class="selo">Pedidos & expediente</span>
+  </header>
+
+  <main>
+    <!-- Introdução e seleção do expediente -->
+    <div class="intro">
+      <div>
+        <p class="eyebrow">DA COZINHA AO FECHAMENTO</p>
+        <h1>Cada pedido, no seu ponto.</h1>
+        <p>Monte o pedido, acompanhe as etapas e confira o resultado do dia.</p>
+      </div>
+
+      <div class="data">
+        <label for="dia">Expediente consultado</label>
+        <input id="dia" type="date">
+      </div>
+    </div>
+
+    <!-- Mensagens de retorno -->
+    <div id="mensagem" role="status" aria-live="polite"></div>
+
+    <div class="layout">
+      <!-- Novo pedido -->
+      <section class="painel montar">
+        <div class="titulo">
+          <span class="numero">01</span>
+
+          <div>
+            <h2>Novo pedido</h2>
+            <p>Os envios entram no expediente de hoje.</p>
+          </div>
+        </div>
+
+        <!-- Produtos favoritos -->
+        <p class="label">ADICIONE UM FAVORITO</p>
+
+        <div class="favoritos">
+          <button
+            type="button"
+            data-nome="Hambúrguer"
+            data-preco="25"
+          >
+            Hambúrguer
+            <b>R$ 25</b>
+          </button>
+
+          <button
+            type="button"
+            data-nome="Batata"
+            data-preco="12"
+          >
+            Batata
+            <b>R$ 12</b>
+          </button>
+
+          <button
+            type="button"
+            data-nome="Refrigerante"
+            data-preco="8"
+          >
+            Refrigerante
+            <b>R$ 8</b>
+          </button>
+        </div>
+
+        <!-- Formulário de produto -->
+        <form id="item-form">
+          <label for="nome">Produto</label>
+          <input
+            id="nome"
+            maxlength="80"
+            placeholder="Ex.: hambúrguer artesanal"
+            required
+          >
+
+          <div class="campos">
+            <div>
+              <label for="quantidade">Quantidade</label>
+              <input
+                id="quantidade"
+                type="number"
+                min="1"
+                max="999"
+                step="1"
+                value="1"
+                required
+              >
+            </div>
+
+            <div>
+              <label for="preco">Preço unitário (R$)</label>
+              <input
+                id="preco"
+                type="number"
+                min="0.01"
+                max="99999.99"
+                step="0.01"
+                placeholder="25,00"
+                required
+              >
+            </div>
+          </div>
+
+          <button class="secundario" type="submit">
+            + Adicionar ao pedido
+          </button>
+        </form>
+
+        <!-- Carrinho e envio -->
+        <div id="carrinho" class="carrinho"></div>
+
+        <div class="total">
+          <span>Total do pedido</span>
+          <strong id="total">R$ 0,00</strong>
+        </div>
+
+        <button id="enviar" class="principal" disabled>
+          Enviar pedido →
+        </button>
+
+        <p class="nota">
+          O formulário é limpo somente após a confirmação do envio.
+        </p>
+      </section>
+
+      <div class="coluna">
+        <!-- Pedidos em andamento -->
+        <section class="painel">
+          <div class="titulo">
+            <span class="numero">02</span>
+
+            <div>
+              <h2>Pedidos em andamento</h2>
+              <p>Avance as etapas para registrar os tempos reais.</p>
+            </div>
+
+            <button id="atualizar" class="texto">
+              Atualizar
+            </button>
+          </div>
+
+          <div id="pedidos" class="pedidos"></div>
+        </section>
+
+        <!-- Fechamento do expediente -->
+        <section class="painel fechamento">
+          <div class="titulo">
+            <span class="numero">03</span>
+
+            <div>
+              <h2>Fechamento do expediente</h2>
+              <p id="situacao">Carregando resumo…</p>
+            </div>
+          </div>
+
+          <div id="indicadores" class="indicadores"></div>
+          <div id="etapas"></div>
+          <div id="gargalos" class="aviso"></div>
+
+          <p class="nota">
+            Média de atendimento: pedidos concluídos.
+            Cancelados não entram no valor concluído nem nos tempos.
+            Limites ilustrativos e ajustáveis.
+          </p>
+
+          <button id="fechar" class="principal" disabled>
+            Fechar expediente
+          </button>
+
+          <p class="nota">
+            Conclua ou cancele todos os pedidos do dia antes de fechar.
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+      FoodPoint · Demonstração independente · Dados salvos somente neste servidor local
+    </footer>
+  </main>
+</body>
+</html>
